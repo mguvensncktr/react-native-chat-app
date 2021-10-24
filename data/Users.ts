@@ -1,0 +1,42 @@
+export default [{
+  id: '1',
+  name: 'Babam',
+  imageUri: 'https://static.wikia.nocookie.net/naruto/images/3/3c/Obito.png/revision/latest?cb=20170329175507&path-prefix=tr',
+  status: 'Ben babayım'
+}, {
+  id: '2',
+  name: 'Pınar',
+  imageUri: 'https://www.populus.com.tr/image/cache/data/resimler/naruto-shippuuden-konoha-kafa-bandi-6698-800x800.png',
+}, {
+  id: '3',
+  name: 'Çağlar',
+  imageUri: 'https://nobleorderbrewing.com/img/lists/97/boruto-5-ways-sasuke-losing-his-rinnegan-makes-sense.jpg',
+}, {
+  id: '4',
+  name: 'Batın',
+  imageUri: 'https://www.merlininkazani.com/images/games/12350/108680_640.jpg',
+}, {
+  id: '5',
+  name: 'Enver',
+  imageUri: 'https://m.media-amazon.com/images/I/41GUmNbdwML._AC_SY780_.jpg',
+}, {
+  id: '6',
+  name: 'Osman',
+  imageUri: 'https://i.pinimg.com/736x/87/b0/0c/87b00cba1ba84d90b319fa10409472cc.jpg',
+}, {
+  id: '7',
+  name: 'Yasemin',
+  imageUri: 'https://i.pinimg.com/originals/2b/80/84/2b8084f1ee00b9bf9636f2b8942ab970.jpg',
+}, {
+  id: '8',
+  name: 'Sedef',
+  imageUri: 'https://nobleorderbrewing.com/img/lists/72/boruto-how-old-is-naruto-boruto-2.jpg',
+}, {
+  id: '9',
+  name: 'Murat',
+  imageUri: 'https://www.4ugk.com/wp-content/uploads/2021/06/O1CN015g31Uo1L1VPWzzCZc_62061239.jpg',
+}, {
+  id: '10',
+  name: 'Güven',
+  imageUri: 'https://i.pinimg.com/originals/ba/97/15/ba9715d30380d5053317d0294275311e.jpg',
+}]

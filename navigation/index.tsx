@@ -1,23 +1,20 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
-import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable, Text, TouchableOpacity, Image, View } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
+import ChatRoomScreen from '../screens/ChatRoomScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import { Ionicons, Feather, FontAwesome } from '@expo/vector-icons';
+import HomeScreen from '../screens/HomeScreen';
+import NewChatScreen from '../screens/NewChatScreen';
+import { useNavigation } from '@react-navigation/native'
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -29,28 +26,50 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+
+  const navigation = useNavigation();
+
   return (
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="Chat" component={ChatRoomScreen}
+        options={({ route }) => ({
+          title: route.params.name,
+          headerLeft: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="chevron-back" size={30} color='#34B7F1' onPress={() => navigation.goBack()} />
+              <Image source={{ uri: route.params.image }} style={{ width: 40, height: 40, borderRadius: 30, marginLeft: 20 }} />
+            </View>
+          ),
+          headerRight: () => (
+            <View style={{ flexDirection: 'row', marginRight: 10 }}>
+              <Ionicons name="videocam-outline" size={26} color='#34B7F1' style={{ marginRight: 20 }} />
+              <Feather name="phone" size={24} color='#34B7F1' />
+            </View>
+          )
+        })}
+      />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen name="NewChat" component={NewChatScreen}
+          options={{
+            headerTitle: 'Yeni Sohbet',
+            headerRight: () => (
+              <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                <Text style={{ color: '#34B7F1' }}>Vazgeç</Text>
+              </TouchableOpacity>
+            )
+          }} />
       </Stack.Group>
     </Stack.Navigator>
   );
 }
 
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
+
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
@@ -58,50 +77,73 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Chats"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        name="Status"
+        component={TabTwoScreen}
+        options={{
+          title: 'Durum',
+          tabBarIcon: ({ color }) => <Ionicons name="sync-circle-outline" size={30} color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Calls"
+        component={TabTwoScreen}
+        options={{
+          title: 'Aramalar',
+          tabBarIcon: ({ color }) => <Feather name="phone" size={26} color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Camera"
+        component={TabTwoScreen}
+        options={{
+          title: 'Kamera',
+          tabBarIcon: ({ color }) => <Ionicons name="camera-outline" size={30} color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Chats"
+        component={HomeScreen}
+        options={({ navigation }: RootTabScreenProps<'Chats'>) => ({
+          title: "Sohbetler",
+          headerShadowVisible: false,
+          tabBarIcon: ({ color }) => <Ionicons name="chatbubbles-outline" size={30} color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => navigation.navigate('NewChat')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
               <FontAwesome
-                name="info-circle"
+                name="pencil-square-o"
                 size={25}
                 color={Colors[colorScheme].text}
                 style={{ marginRight: 15 }}
               />
             </Pressable>
           ),
+          headerLeft: () => (
+            <Text style={{ color: '#34B7F1', marginLeft: 15, fontSize: 16, fontWeight: '500' }}>Düzenle</Text>
+          ),
+          headerTitleStyle: {
+            fontSize: 20,
+            fontWeight: 'bold'
+          }
         })}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Settings"
         component={TabTwoScreen}
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Ayarlar',
+          tabBarIcon: ({ color }) => <Ionicons name="settings-outline" size={28} color={color} />,
         }}
       />
     </BottomTab.Navigator>
   );
 }
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
-}
